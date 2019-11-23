@@ -11,6 +11,7 @@ spiders = {}
 
 @app.route('/login', methods=['POST'])
 def login():
+    global spiders, _mapping
     spider = Spider()
     register(spider)
     uname = request.form.get('uname', '')
@@ -33,6 +34,7 @@ def login():
 
 @app.route('/get_projects', methods=['GET'])
 def get_projects():
+    global spiders, _mapping
     token = request.args.get('token', '')
     spider = spiders.get(token, None)
     if spider is None:
@@ -45,6 +47,7 @@ def get_projects():
 
 @app.route('/generate_code', methods=['POST'])
 def generate_code():
+    global spiders, _mapping
     token = request.args.get('token', '')
     spider = spiders.get(token, None)
     if spider is None:
@@ -62,6 +65,7 @@ def generate_code():
 
 @app.route('/get_code_list', methods=['GET'])
 def get_code_list():
+    global spiders, _mapping
     token = request.args.get('token', '')
     spider = spiders.get(token, None)
     if spider is None:
@@ -76,6 +80,7 @@ def get_code_list():
 
 @app.route('/use_code', methods=['POST'])
 def user_code():
+    global spiders, _mapping
     token = request.args.get('token', '')
     spider = spiders.get(token, None)
     if spider is None:
@@ -89,6 +94,7 @@ def user_code():
 
 @app.route('/my_projects', methods=['GET'])
 def my_projects():
+    global spiders, _mapping
     token = request.args.get('token', '')
     spider = spiders.get(token, None)
     if spider is None:
