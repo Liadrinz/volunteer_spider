@@ -214,10 +214,3 @@ def register(spider):
         project.pop('')
         projects.append(project)
         return projects
-
-if __name__ =='__main__':
-    spider = Spider()
-    register(spider)
-    spider.login_bv('liajun', 'cyaCYA123')
-    resp = spider.api['my_projects']()
-    print(resp)
