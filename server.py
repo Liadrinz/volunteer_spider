@@ -87,4 +87,4 @@ def user_code():
         return Response(response="bad request", status=400)
     return json.dumps(resp)
 
-app.run('0.0.0.0', 8080, debug=True)
+app.run('0.0.0.0')
