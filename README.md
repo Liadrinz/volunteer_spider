@@ -85,3 +85,22 @@
     - code: Intger
         - 0: 成功
         - 非0: 失败
+
+## 获取我的项目
+
+- 说明: 此接口获取的是志愿者的项目
+- url: /my_projects
+- method: GET
+- param:
+    - token: String 登录时返回的令牌
+- form:
+    - 无
+- response:
+    - 返回的是项目列表, 列表中每个元素有以下字段
+    - id: String 活动id, 即opp_id
+    - name: String 活动名称
+    - group: String 项目团体
+    - date: String 加入日期, yyyy-MM-dd
+    - status: String 状态
+    - job: String 岗位
+    - time: String 服务时长, 可转浮点数

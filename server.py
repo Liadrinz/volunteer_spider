@@ -87,4 +87,17 @@ def user_code():
         return Response(response="bad request", status=400)
     return json.dumps(resp)
 
-app.run('0.0.0.0')
+@app.route('/my_projects', methods=['GET'])
+def my_projects():
+    token = request.args.get('token', '')
+    spider = spiders.get(token, None)
+    if spider is None:
+        return Response(response="forbidden", status=403)
+    try:
+        resp = spider.api['my_projects']()
+    except:
+        return Response(response="bad request", status=400)
+    return json.dumps(resp)
+
+if __name__ == '__main__':
+    app.run('0.0.0.0')
