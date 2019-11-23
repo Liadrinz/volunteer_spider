@@ -60,8 +60,7 @@
 - url: /generate_code
 - method: POST
 - param:
-    - token: String
-        - 登录时返回的令牌
+    - token: String 登录时返回的令牌
 - form:
     - opp_id: String 活动id
     - job_id: String 岗位id
@@ -70,5 +69,19 @@
     - memo: String 备注
 - response:
     - code: Integer
+        - 0: 成功
+        - 非0: 失败
+
+## 使用时长码
+
+- 说明: 只对志愿者有效
+- url: /use_code
+- method: POST
+- param:
+    - token: String 登录时返回的令牌
+- form:
+    - code: String 时长码
+- response:
+    - code: Intger
         - 0: 成功
         - 非0: 失败
