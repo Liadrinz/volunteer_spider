@@ -106,7 +106,7 @@ def my_projects():
     return json.dumps(resp)
 
 @app.route('/my_hour', methods=['GET'])
-def my_projects():
+def my_hour():
     global spiders, _mapping
     token = request.args.get('token', '')
     spider = spiders.get(token, None)
