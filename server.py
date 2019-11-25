@@ -105,5 +105,18 @@ def my_projects():
         return Response(response="bad request", status=400)
     return json.dumps(resp)
 
+@app.route('/my_hour', methods=['GET'])
+def my_projects():
+    global spiders, _mapping
+    token = request.args.get('token', '')
+    spider = spiders.get(token, None)
+    if spider is None:
+        return Response(response="forbidden", status=403)
+    try:
+        resp = spider.api['my_hour']()
+    except:
+        return Response(response="bad request", status=400)
+    return json.dumps(resp)
+
 if __name__ == '__main__':
     app.run('0.0.0.0')
