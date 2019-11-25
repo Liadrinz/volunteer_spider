@@ -175,49 +175,82 @@ def register(spider):
         )
         return json.loads(re.match(r'.*(\{.*\}).*', resp.text).groups()[0])
 
-    @spider.register('my_projects')
-    def my_projects():
-        resp = spider.sess.get('https://www.bv2008.cn/app/opp/opp.my.php')
+    def crawl_my_table(url, fields, flag):
+        resp = spider.sess.get(url)
         soup = BeautifulSoup(resp.text, 'lxml')
         tbody = soup.find('table', {'class': 'table1'})
         projects = []
         ptr = 0
         project = {}
-        fields = ['id', 'name', 'group', '', '', 'date', 'status', 'job', 'time', '', '', '']
         loop = len(fields)
         for td in tbody.find_all('td'):
+            if flag == 'h':
+                a = td.find('a')
+                if a is not None:
+                    match_id = re.match(r'.*view\.php\?id\=([0-9]+).*', a['href'])
+                    if match_id:
+                        project[fields[ptr]] = Spider.replacer(match_id.groups()[0])
+                        ptr += 1
             if ptr % loop == 0 and ptr != 0:
                 ptr %= loop
-                project.pop('')
+                if '' in project:
+                    project.pop('')
                 projects.append(project)
                 project = {}
             if td.string is not None:
                 project[fields[ptr]] = Spider.replacer(td.string)
                 ptr += 1
             else:
-                a = td.find('a')
-                font = td.find('font')
-                if a is not None:
-                    match_id = re.match(r'.*view\.php\?id\=([0-9]+).*', a['href'])
-                    if match_id:
-                        project[fields[ptr]] = Spider.replacer(match_id.groups()[0])
+                if flag == 'p':
+                    a = td.find('a')
+                    font = td.find('font')
+                    if a is not None:
+                        match_id = re.match(r'.*view\.php\?id\=([0-9]+).*', a['href'])
+                        if match_id:
+                            project[fields[ptr]] = Spider.replacer(match_id.groups()[0])
+                            ptr += 1
+                        project[fields[ptr]] = Spider.replacer(a.string)
                         ptr += 1
-                    project[fields[ptr]] = Spider.replacer(a.string)
-                    ptr += 1
-                    while a.next_sibling is not None:
-                        a = a.next_sibling
-                    project[fields[ptr]] = Spider.replacer(a)
-                    ptr += 1
-                elif font is not None:
-                    project[fields[ptr]] = Spider.replacer(font.string)
-                    ptr += 1
-        project.pop('')
+                        while a.next_sibling is not None:
+                            a = a.next_sibling
+                        project[fields[ptr]] = Spider.replacer(a)
+                        ptr += 1
+                    elif font is not None:
+                        project[fields[ptr]] = Spider.replacer(font.string)
+                        ptr += 1
+                elif flag == 'h':
+                    for child in td.children:
+                        if child.string:
+                            project[fields[ptr]] = Spider.replacer(child.string)
+                            ptr += 1
+                        if 'href' in td:
+                            project[fields[ptr]] = Spider.replacer(child['href'])
+                            ptr += 1
+        if '' in project:
+            project.pop('')
         projects.append(project)
         return projects
 
-if __name__ =='__main__':
-    spider = Spider()
-    register(spider)
-    spider.login_bv('liajun', 'cyaCYA123')
-    resp = spider.api['my_projects']()
-    print(resp)
+    @spider.register('my_projects')
+    def my_projects():
+        return crawl_my_table(
+            'https://www.bv2008.cn/app/opp/opp.my.php',
+            ['id', 'name', 'group', '', '', 'date', 'status', 'job', 'time', '', '', ''],
+            'p'
+        )
+
+    @spider.register('my_hour')
+    def my_hour():
+        data = crawl_my_table(
+            'https://www.bv2008.cn/app/user/hour.php',
+            ['time', 'description', 'method', 'status', 'opp_id', 'name', 'team_id', 'team', 'datetime'],
+            'h'
+        )
+        for obj in data:
+            time = obj['time']
+            time = time[:-2]
+            datetime = obj['datetime']
+            datetime = datetime[:10] + ' ' + datetime[10:]
+            obj['datetime'] = datetime
+            obj['time'] = time
+        return data
