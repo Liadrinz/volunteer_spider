@@ -104,3 +104,24 @@
     - status: String 状态
     - job: String 岗位
     - time: String 服务时长, 可转浮点数
+
+## 获取我的服务时长
+
+- 说明: 获取志愿者服务时长页面表格中的数据
+- url: /my_hour
+- method: GET
+- param:
+    - token: String 登录时返回的令牌
+- form:
+    - 无
+- response:
+    - 返回的是项目列表, 列表中每个元素有以下字段
+    - time: String 服务时长, 可转浮点数
+    - description: String 时长下面的描述文字
+    - method: String 录入方式
+    - status: String 状态
+    - opp_id: 活动id
+    - name: 活动名称
+    - team_id: 团队id
+    - team: 团队名称
+    - datetime: String 日期和时间, yyyy-MM-dd hh:mm:ss
