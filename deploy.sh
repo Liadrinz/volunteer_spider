@@ -1,4 +1,5 @@
 sudo pkill -f uwsgi -9
 sudo service nginx stop
-uwsgi uwsgi.ini
+nohup uwsgi uwsgi.ini > nohup.log &
 sudo service nginx start
+
