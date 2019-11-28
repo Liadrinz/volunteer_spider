@@ -254,3 +254,10 @@ def register(spider):
             obj['datetime'] = datetime
             obj['time'] = time
         return data
+
+    @spider.register('team_hour')
+    def team_hour():
+        resp = spider.sess.get('https://www.bv2008.cn/app/user/home.php')
+        soup = BeautifulSoup(resp.text, 'lxml')
+        hour = soup.find_all('table')[1].find_all('td')[2]
+        return hour.find('span').string

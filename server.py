@@ -118,5 +118,18 @@ def my_hour():
         return Response(response="bad request", status=400)
     return json.dumps(resp)
 
+@app.route('/team_hour', methods=['GET'])
+def team_hour():
+    global spiders, _mapping
+    token = request.args.get('token', '')
+    spider = spiders.get(token, None)
+    if spider is None:
+        return Response(response="forbidden", status=403)
+    try:
+        resp = spider.api['team_hour']()
+    except:
+        return Response(response="bad request", status=400)
+    return resp
+
 if __name__ == '__main__':
     app.run('0.0.0.0')
