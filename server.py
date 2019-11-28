@@ -59,7 +59,8 @@ def generate_code():
     memo= request.form.get('memo', '')
     try:
         resp0 = spider.api['generate_code'](opp_id, job_id, count, time, memo)
-        if resp0['code'] == '1':
+        print(resp0)
+        if resp0['code'] == 1:
             raise Exception()
         resp = spider.api['get_code_list'](opp_id, job_id)
     except:
