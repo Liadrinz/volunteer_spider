@@ -58,7 +58,8 @@ def generate_code():
     time= request.form.get('time', '')
     memo= request.form.get('memo', '')
     try:
-        resp = spider.api['generate_code'](opp_id, job_id, count, time, memo)
+        spider.api['generate_code'](opp_id, job_id, count, time, memo)
+        resp = spider.api['get_code_list'](opp_id, job_id)
     except:
         return Response(response="bad request", status=400)
     return json.dumps(resp)
