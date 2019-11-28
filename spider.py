@@ -118,8 +118,7 @@ def register(spider):
                 'job_id': job_id,
                 'hc_total': count,
                 'hc_hour': time,
-                'memo': memo,
-                'uid': ''
+                'memo': memo
             },
             headers=Spider.headers)
         return json.loads(re.match(r'.*(\{.*\}).*', resp.text).groups()[0])
